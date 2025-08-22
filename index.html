@@ -3,14 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Pago con MetaMask</title>
-  <meta http-equiv="refresh" content="0;url=https://metamask.app.link/send/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174@137/transfer?address=0x1111111111111111111111111111111111111111&uint256=1000000">
+  <script>
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const to = urlParams.get("address") || "0x1111111111111111111111111111111111111111";
+      const amount = urlParams.get("amount") || "1";
+
+      // USDT Polygon = 6 decimales → multiplico por 1e6
+      const decimals = 6;
+      const uintAmount = BigInt(Math.floor(parseFloat(amount) * (10 ** decimals)));
+
+      const link = `https://metamask.app.link/send/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174@137/transfer?address=${to}&uint256=${uintAmount}`;
+
+      // Redirigir
+      window.location.href = link;
+
+      // Fallback link visible
+      document.getElementById("link").href = link;
+      document.getElementById("link").innerText = "Clic aquí si no pasa nada";
+    };
+  </script>
 </head>
 <body>
-  <p>
-    Redirigiendo a MetaMask...<br>
-    <a href="https://metamask.app.link/send/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174@137/transfer?address=0x1111111111111111111111111111111111111111&uint256=1000000">
-      Clic aquí si no pasa nada
-    </a>
+  <p>Redirigiendo a MetaMask...<br>
+     <a id="link" href="#">Clic aquí si no pasa nada</a>
   </p>
 </body>
 </html>
